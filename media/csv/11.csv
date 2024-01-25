@@ -1,0 +1,8 @@
+title of card,list of the card,members of card,labels of card,start date of card,due date of card,reminder of card,storypoint of card,estimate of card,description of card,status of card
+c1,l2,,[],2023-12-20T22:20:00Z,2023-12-15T18:50:08.777649Z,5 Days before,0,0,,Done
+c2,l1,,[],,2023-12-15T18:54:50.956281Z,5 Days before,0,0,,Done
+c3,l2,,[],2023-12-18T22:22:00Z,2023-12-15T18:52:45.227162Z,3 Day before,0,0,,Done
+c4,l1,,[],2023-12-22T22:25:00Z,2023-12-15T18:55:32.154042Z,2 Day before,0,0,,Done
+card1,l2,,[],,2023-12-28T10:11:00.769230Z,At time of due date,0,0,,Done
+c5,l1,,[],2023-12-21T22:25:00Z,2023-12-15T18:55:48.821102Z,5 Days before,0,0,,Done
+card2,l2,,[],2023-12-28T13:43:00Z,2023-12-28T10:13:06.322537Z,At time of due date,0,0,,Done
