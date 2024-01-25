@@ -556,7 +556,10 @@ class ListBoardTimelineSerializer(serializers.ModelSerializer):
         fields = ['id','title','cards']
     
     def get_cards(self, obj):
-        cards = obj.clist.all().order_by('startdate', 'duedate')
+        member_id = obj.id
+        view = self.context.get('view')  
+        board_id = view.kwargs.get('pk')
+        cards = Card.objects.filter(list=obj.id) 
         return CardsTimelineSerializer(cards, many=True).data
 class ListTimelineSerializer(serializers.ModelSerializer):
     lists = serializers.SerializerMethodField()
@@ -565,8 +568,8 @@ class ListTimelineSerializer(serializers.ModelSerializer):
         fields = ['id', 'lists']
 
     def get_lists(self, obj):
-        lists = obj.lboard.all()
-        return ListBoardTimelineSerializer(lists, many=True).data
+        lists = obj.lboard.filter(board=obj.id)
+        return ListBoardTimelineSerializer(lists, many=True, context={'view': self.context.get('view')}).data
 
 #member
 class MemberTimelineSerializer(serializers.ModelSerializer):
@@ -580,7 +583,6 @@ class MemberTimelineSerializer(serializers.ModelSerializer):
         member_id = obj.id
         view = self.context.get('view')  
         board_id = view.kwargs.get('pk')
-        # board_id = self.kwargs['pk'] 
         lists = List.objects.filter(board=board_id) 
         card_members = MemberCardRole.objects.filter(member_id=member_id) 
         card_ids = [card_member.card.id for card_member in card_members] 
@@ -602,6 +604,9 @@ class LabelTimelineSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'color', 'cards']
 
     def get_cards(self, obj):
+        member_id = obj.id
+        view = self.context.get('view')  
+        board_id = view.kwargs.get('pk')
         label_id = obj.id  
         card_labels = CardLabel.objects.filter(label_id=label_id)
         card_ids = [card_label.card.id for card_label in card_labels]
@@ -614,8 +619,8 @@ class LabelsTimelineSerializer(serializers.ModelSerializer):
         fields = ['id', 'labels']
 
     def get_labels(self, obj):
-        label = obj.boardl.all()
-        return LabelTimelineSerializer(label, many=True).data
+        label = obj.boardl.filter(board=obj.id)
+        return LabelTimelineSerializer(label, many=True , context={'view': self.context.get('view')}).data
 
 class TimelineStartSerializer(serializers.ModelSerializer):
     class Meta:

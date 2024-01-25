@@ -438,7 +438,8 @@ class LabelTimelineView(ModelViewSet):
 
     def get_queryset(self):
         board_id = self.kwargs.get('pk')
-        return Board.objects.filter(id = board_id)
+        member_id = Member.objects.get(user_id = self.request.user.id)
+        return Board.objects.filter(id=board_id, members=member_id)
 
 class TimelineStartPeriodView(ModelViewSet):
     serializer_class = TimelineStartSerializer 
