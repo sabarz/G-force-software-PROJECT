@@ -96,8 +96,8 @@ calender_router = nested.NestedSimpleRouter(nestedRouter, r'boards', lookup='boa
 calender_router.register(r'calender', views.CalenderView, basename='calender')
 
 ###Chatbot
-router.register('csvbuild',views.CardCSVViewSet,basename='csvbuild')
-router.register('chatbot',views.ChatbotAPIView,basename='chatbot')
+# router.register('csvbuild',views.CardCSVViewSet,basename='csvbuild')
+# router.register('chatbot',views.ChatbotAPIView,basename='chatbot')
 
 
 urlpatterns = router.urls + nestedRouter.urls + calender_router.urls + meeting_router.urls + search_router.urls + filter_board_router.urls + timeline1_router.urls + timeline2_router.urls

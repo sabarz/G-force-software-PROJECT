@@ -1,0 +1,5 @@
+database and migrations
+docker
+server deploy
+drag and drop
+routing
