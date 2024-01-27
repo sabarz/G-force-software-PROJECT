@@ -438,7 +438,8 @@ class LabelTimelineView(ModelViewSet):
 
     def get_queryset(self):
         board_id = self.kwargs.get('pk')
-        return Board.objects.filter(id = board_id)
+        member_id = Member.objects.get(user_id = self.request.user.id)
+        return Board.objects.filter(id=board_id, members=member_id)
 
 class TimelineStartPeriodView(ModelViewSet):
     serializer_class = TimelineStartSerializer 
@@ -1040,3 +1041,28 @@ class CardFilterView(ModelViewSet):
         boards = Board.objects.filter(members = member) 
         lists = List.objects.filter(board__in = boards) 
         return Card.objects.filter(list__in=lists)
+
+
+## board view cards
+class BoardViewCardView(ModelViewSet): 
+    serializer_class = BoardViewCardSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        member = Member.objects.get(user_id = self.request.user.id)
+        boards = Board.objects.filter(id = self.kwargs['board_pk'],members = member)
+        lists = List.objects.filter(board__in = boards)
+        cards = Card.objects.filter(list__in=lists) 
+        return cards
+
+## highlight board cards
+class BoardHighlightCardView(ModelViewSet): 
+    serializer_class = BoardHighlightCardSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        member = Member.objects.get(user_id = self.request.user.id)
+        boards = Board.objects.filter(id = self.kwargs['board_pk'],members = member)
+        lists = List.objects.filter(board__in = boards)
+        cards = Card.objects.filter(list__in=lists, storypoint__gte=5) 
+        return cards
