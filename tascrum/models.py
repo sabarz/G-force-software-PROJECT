@@ -69,7 +69,7 @@ class MemberBoardRole(models.Model):
 
 
 class Meeting(models.Model):
-    member = models.ForeignKey(Member,on_delete=models.CASCADE,related_name='Mmember')
+    members = models.ManyToManyField(Member, through='MemberMeeting',related_name='mmembers')
     board = models.ForeignKey(Board,on_delete=models.CASCADE,related_name='mboard')
     title = models.CharField(max_length=255,null=False,default='meeting')
     time = models.DateTimeField(null=False)
@@ -77,6 +77,10 @@ class Meeting(models.Model):
     class Meta:
         ordering = ['time']
         # unique_together = ('board', 'time',)
+
+class MemberMeeting(models.Model):
+    participant = models.ForeignKey(Member, on_delete=models.CASCADE,related_name='mmember')
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE,related_name='mmeet')
 
 
 class List(models.Model):
