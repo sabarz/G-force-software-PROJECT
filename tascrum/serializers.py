@@ -52,10 +52,10 @@ class WorkspaceBoardSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['id','title','backgroundimage','has_star']
     
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['backgroundimage'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['backgroundimage']
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['backgroundimage'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['backgroundimage']
+    #     return representation
 
 
 class WorkspaceRoleSerializer(serializers.ModelSerializer):
@@ -238,7 +238,7 @@ class CreateListSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.title = validated_data.get('title', instance.title)
-        instance.backgroundimage = validated_data.get('backgroundimage' , instance.backgroundimage)
+        # instance.backgroundimage = validated_data.get('backgroundimage' , instance.backgroundimage)
         instance.save()
         return instance
 
@@ -477,7 +477,7 @@ class AddMemberSerializer(serializers.ModelSerializer):
         board = validated_data.get('board')
         newMember = validated_data.get('member')
         board_role = MemberBoardRole.objects.filter(member = owner,board=board).first()
-        if board_role.role == "owner":
+        if board_role.role == "Owner":
             if not MemberBoardRole.objects.filter(member = newMember,board=board).exists(): 
                 return MemberBoardRole.objects.create(member = newMember,board=board,role='member')
             else:
