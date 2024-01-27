@@ -1055,3 +1055,14 @@ class BoardViewCardView(ModelViewSet):
         cards = Card.objects.filter(list__in=lists) 
         return cards
 
+## highlight board cards
+class BoardHighlightCardView(ModelViewSet): 
+    serializer_class = BoardHighlightCardSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        member = Member.objects.get(user_id = self.request.user.id)
+        boards = Board.objects.filter(id = self.kwargs['board_pk'],members = member)
+        lists = List.objects.filter(board__in = boards)
+        cards = Card.objects.filter(list__in=lists, storypoint__gte=5) 
+        return cards
