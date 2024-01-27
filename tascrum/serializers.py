@@ -52,10 +52,10 @@ class WorkspaceBoardSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['id','title','backgroundimage','has_star']
     
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     representation['backgroundimage'] = "https://amirmohammadkomijani.pythonanywhere.com" + representation['backgroundimage']
-    #     return representation
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
+        return representation
 
 
 class WorkspaceRoleSerializer(serializers.ModelSerializer):
@@ -92,6 +92,11 @@ class CreateWorkspaceSerializer(serializers.ModelSerializer):
         instance.backgroundimage = validated_data.get('backgroundimage', instance.backgroundimage)
         instance.save()
         return instance
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
+        return representation
+
 
 ### Board feature -> it includes all details about a board
 class BoardMemberSerializer(serializers.ModelSerializer):
@@ -165,12 +170,20 @@ class CreateBoardSerializer(serializers.ModelSerializer):
         instance.backgroundimage = validated_data.get('backgroundimage' , instance.backgroundimage)
         instance.save()
         return instance
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
+        return representation
 
 
 class BoardBackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ['id','backgroundimage']
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
+        return representation
 
 class BoardRecentlyViewed(serializers.ModelSerializer):
     class Meta:
