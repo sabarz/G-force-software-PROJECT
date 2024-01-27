@@ -180,10 +180,10 @@ class BoardBackgroundImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
         fields = ['id','backgroundimage']
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
-        return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     representation['backgroundimage'] = "http://141.11.182.93:8001" + representation['backgroundimage']
+    #     return representation
 
 class BoardRecentlyViewed(serializers.ModelSerializer):
     class Meta:
