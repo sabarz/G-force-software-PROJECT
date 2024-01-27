@@ -820,3 +820,18 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['Newpassword'])
         user.save()
         return user
+
+
+## board view cards
+class BoardViewCardSerializer(serializers.ModelSerializer):
+    members = CardMemberSerializer(many=True)
+    labels = CardLableSerialzier(many=True)
+    role = serializers.SerializerMethodField()
+    class Meta:
+        model = Card
+        fields = ['id','title','list','members','role','labels','duedate']
+
+    def get_role(self, obj):
+        roles = obj.crole.all()
+        return CardRoleSerializer(roles, many=True).data
+
