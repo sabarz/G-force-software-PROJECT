@@ -26,7 +26,7 @@ router.register('workspace-members',views.WorkspaceMembersView,basename='workspa
 ### board urls
 router.register('board',views.BoardViewSet,basename='board')
 router.register('board-bgimage',views.BoardImageView,basename='board-bgimage')
-router.register('boards-has-start',views.BoardStarView,basename='boards-has-start')
+router.register('boards-has-star',views.BoardStarView,basename='boards-has-star')
 router.register('board-star-update',views.BoardStarUpdate,basename='board-star-update')
 router.register('board-invitation-link',views.BoardInvitationLinkView,basename='board-invitation-link')
 router.register('starred-boards',views.BoardStarView,basename='starred-boards')
