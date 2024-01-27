@@ -473,7 +473,7 @@ class CreateMeetingView(ModelViewSet):
 
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
-        return Meeting.objects.filter(member = member,board=self.kwargs['board_pk'])
+        return Meeting.objects.filter(members = member,board=self.kwargs['board_pk'])
 
 class MeetingView(ModelViewSet):
     serializer_class = MeetingSerializer

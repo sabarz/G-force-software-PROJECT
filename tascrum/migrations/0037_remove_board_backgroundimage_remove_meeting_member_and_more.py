@@ -12,19 +12,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name="board",
-            name="backgroundimage",
-        ),
+        # migrations.RemoveField(
+        #     model_name="board",
+        #     name="backgroundimage",
+        # ),
         migrations.RemoveField(
             model_name="meeting",
             name="member",
         ),
-        migrations.AlterField(
-            model_name="board",
-            name="invitation_link",
-            field=models.CharField(default=uuid.uuid4, max_length=255, unique=True),
-        ),
+        # migrations.AlterField(
+        #     model_name="board",
+        #     name="invitation_link",
+        #     field=models.CharField(default=uuid.uuid4, max_length=255, unique=True),
+        # ),
         migrations.CreateModel(
             name="MemberMeeting",
             fields=[

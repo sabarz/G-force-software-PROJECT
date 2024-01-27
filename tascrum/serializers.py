@@ -670,11 +670,11 @@ class CreateBurndownChartSerializer(serializers.ModelSerializer):
 class CreateMeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting
-        fields = ['id','member','title','time']
+        fields = ['id','members','title','time']
 
     def create(self, validated_data):
         member = Member.objects.get(user_id = self.context['user_id'])
-        new_member = validated_data['member']
+        new_member = validated_data['members']
         board = Board.objects.get(id = self.context['board_id'])
         time = validated_data['time']
         title = validated_data['title']
