@@ -412,7 +412,14 @@ class Internal_DndView(ModelViewSet):
 
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
-        return Card.objects.filter(members = member)
+        board_id = self.kwargs['board_pk']
+        list_id = List.objects.filter(board__in = board_id)
+        return Card.objects.filter(list__in = list_id)
+
+
+        # board_id = self.request.query_params.get('board')
+        # list_id = List.objects.filter(board__in = board_id)
+        # return Card.objects.filter(list__in=list_id)
 
 
 ### time line 

@@ -259,9 +259,19 @@ class CreateListSerializer(serializers.ModelSerializer):
 ###### Card Serializer
 class CardMemberSerializer(serializers.ModelSerializer):
     user = UserProfileSerializer()
+
     class Meta:
         model = Member
-        fields = ['id','user']
+        fields = ['id', 'user']
+    
+    def to_representation(self, instance):
+        # Check if the member has the role 'owner' for the specific card
+        if instance.cmember.filter(role='owner').exists():
+            return None
+        # Check if the member has the role 'assign' for the specific card
+        if instance.cmember.filter(role='assign').exists():
+            return super().to_representation(instance)
+        return None
 class CardListSerializer(serializers.ModelSerializer):
     class Meta:
         model = List
@@ -286,8 +296,13 @@ class CardSerializer(serializers.ModelSerializer):
         fields = ['id','order','title','list','members','role','labels','startdate','duedate','reminder', 'storypoint', 'setestimate','description','status','comment']
 
     def get_role(self, obj):
-        roles = obj.crole.all()
+        roles = obj.crole.exclude(role='owner')
         return CardRoleSerializer(roles, many=True).data
+    
+    # def get_members(self, obj):
+
+        # members = Member.objects.filter(cmembers__card=obj, cmembers__role__ne='owner')
+        # return CardMemberSerializer(members, many=True).data
     
 class CardProfileSerializer(serializers.ModelSerializer):
     members = CardMemberSerializer(many=True)
@@ -309,9 +324,10 @@ class CreateCardSerializer(serializers.ModelSerializer):
         fields = ['id','title','list','startdate','duedate', 'reminder', 'storypoint', 'setestimate','description','status', 'comment']
 
     def create(self, validated_data):
-        validated_data['duedate'] = timezone.now()    
+        validated_data['duedate'] = timezone.now()
+        # member = Member.objects.get(user_id = self.context['user_id'])    
         card = Card.objects.create(**validated_data)
-        # MemberCardRole.objects.create(card)
+        # MemberCardRole.objects.create(card = card,member=member,role='owner')
         return card
     
     def update(self, instance, validated_data):
@@ -459,6 +475,7 @@ class CardAssignSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # owner = Member.objects.get(user_id = self.context['user_id'])
         # board_role = MemberBoardRole.objects.filter(member = owner).first()
+        validated_data['role'] = 'assign'
         return MemberCardRole.objects.create(**validated_data)
         # else:
         #     raise serializers.ValidationError("you are not owner of this board.")
@@ -512,6 +529,7 @@ class Internal_DnDSerializer(serializers.ModelSerializer):
         new_order = validated_data.get('order', instance.order)
         new_list = validated_data.get('list', instance.list)
 
+        ## internal
         if instance.list == new_list:
             # Update order for cards in the same list
             if new_order < instance.order:
@@ -529,14 +547,18 @@ class Internal_DnDSerializer(serializers.ModelSerializer):
                     card.order -= 1
                     card.save()
 
+        ## external
         elif instance.list != new_list:
+            cards_to_update_old_list = Card.objects.none()
+            cards_to_update_new_list = Card.objects.none()
+
             # Update order for cards in the old list with order greater than instance.order
             if new_order < instance.order:
                 cards_to_update_old_list = Card.objects.filter(list=instance.list, order__gt=instance.order).exclude(
                     id=instance.id
                 )
             # Update order for cards in the new list with order greater than or equal to new_order
-            elif new_order > instance.order:
+            elif new_order >= instance.order:
                 cards_to_update_new_list = Card.objects.filter(list=new_list, order__gte=new_order)
 
             # Update order for cards in both cases
