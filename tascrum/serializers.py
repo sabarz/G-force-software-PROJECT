@@ -89,7 +89,7 @@ class CreateWorkspaceSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.type = validated_data.get('type', instance.type)
         instance.description = validated_data.get('description', instance.description)
-        instance.backgroundImage = validated_data.get('backgroundimage', instance.backgroundImage)
+        instance.backgroundimage = validated_data.get('backgroundimage', instance.backgroundImage)
         instance.save()
         return instance
 
