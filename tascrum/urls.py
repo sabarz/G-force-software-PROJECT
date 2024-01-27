@@ -105,6 +105,6 @@ boardview_router.register(r'boardview', views.BoardViewCardView, basename='board
 boardhighlight_router = nested.NestedSimpleRouter(nestedRouter, r'boards', lookup='board')
 boardhighlight_router.register(r'boardhighlight', views.BoardHighlightCardView, basename='boardhighlight')
 
-urlpatterns = router.urls + nestedRouter.urls + calender_router.urls + meeting_router.urls + search_router.urls + filter_board_router.urls + timeline1_router.urls + timeline2_router.urls + boardview_router.urls 
+urlpatterns = router.urls + nestedRouter.urls + calender_router.urls + meeting_router.urls + search_router.urls + filter_board_router.urls + timeline1_router.urls + timeline2_router.urls + boardview_router.urls + boardhighlight_router.urls
 
 

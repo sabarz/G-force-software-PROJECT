@@ -1051,7 +1051,6 @@ class BoardViewCardView(ModelViewSet):
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
         w = Workspace.objects.filter(id = self.kwargs['board_pk'])
-        print(w)
         boards = Board.objects.filter(workspace__in=w,members = member)
         lists = List.objects.filter(board__in = boards)
         cards = Card.objects.filter(list__in=lists) 
@@ -1064,7 +1063,8 @@ class BoardHighlightCardView(ModelViewSet):
 
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
-        boards = Board.objects.filter(id = self.kwargs['board_pk'],members = member)
+        w = Workspace.objects.filter(id = self.kwargs['board_pk'])
+        boards = Board.objects.filter(workspace__in=w,members = member)
         lists = List.objects.filter(board__in = boards)
         cards = Card.objects.filter(list__in=lists, storypoint__gte=5) 
         return cards
