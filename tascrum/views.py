@@ -157,7 +157,7 @@ class BoardStarView(ModelViewSet):
     
 class BoardStarUpdate(ModelViewSet):
     queryset = Board.objects.all()
-    serializer_class = BoardSerializer
+    serializer_class = BoardStarSerializer
 
     @action(detail=True, methods=['put'])
     def update_star(self, request, pk=None):

@@ -134,8 +134,7 @@ class BoardSerializer(serializers.ModelSerializer):
 
     def get_list(self, obj):
         list = obj.lboard.all()
-        return BoardListSerializer(list, many=True).data
-    
+        return BoardListSerializer(list, many=True).data    
 class BoardProfileSerializer(serializers.ModelSerializer):
     workspace = WorkspaceSerializer(read_only=True)
     list = serializers.SerializerMethodField()
@@ -192,7 +191,7 @@ class BoardRecentlyViewed(serializers.ModelSerializer):
 class BoardStarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Board
-        fields = ['id','title','backgroundimage','has_star']
+        fields = ['id','has_star']
 
     # def update(self, instance, validated_data):
     #     instance.has_star = validated_data.get('has_star', instance.has_star)
