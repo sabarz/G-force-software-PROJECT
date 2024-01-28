@@ -6,4 +6,4 @@ import string
 #     random_string = ''.join(random.choice(letters) for i in range(10))
 #     return f"https://example.com/invitation/{random_string}"
 
-OPENAI_API_KEY = "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"
+OPENAI_API_KEY = "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"
