@@ -193,10 +193,10 @@ class BoardStarSerializer(serializers.ModelSerializer):
         model = Board
         fields = ['id','has_star']
 
-    # def update(self, instance, validated_data):
-    #     instance.has_star = validated_data.get('has_star', instance.has_star)
-    #     instance.save()
-    #     return instance
+    def update(self, instance, validated_data):
+        instance.has_star = validated_data.get('has_star', instance.has_star)
+        instance.save()
+        return instance
 
 class CreateBoardStarSerializer(serializers.ModelSerializer):
     class Meta:

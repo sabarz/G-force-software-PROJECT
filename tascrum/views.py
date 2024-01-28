@@ -159,15 +159,15 @@ class BoardStarUpdate(ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardStarSerializer
 
-    @action(detail=True, methods=['put'])
-    def update_star(self, request, pk=None):
-        board = self.get_object()
-        serializer = self.get_serializer(board, data=request.data, partial=True)  
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # @action(detail=True, methods=['put'])
+    # def update_star(self, request, pk=None):
+    #     board = self.get_object()
+    #     serializer = self.get_serializer(board, data=request.data, partial=True)  
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # class BoardInvitationLinkView(ModelViewSet):
 #     queryset = Board.objects.all()
