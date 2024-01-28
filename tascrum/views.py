@@ -149,22 +149,25 @@ class BoardMembersView(ModelViewSet):
         return Board.objects.filter(members = member_id)
     
 class BoardStarView(ModelViewSet):
-    serializer_class = BoardStarSerializer
+    serializer_class = BoardSerializer
     
     def get_queryset(self):
         member_id = Member.objects.get(user_id = self.request.user.id)
         return Board.objects.filter(members=member_id, has_star=True)
     
 class BoardStarUpdate(ModelViewSet):
-    serializer_class = CreateBoardStarSerializer
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
 
     @action(detail=True, methods=['put'])
     def update_star(self, request, pk=None):
         board = self.get_object()
-        serializer = self.get_serializer(board, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        serializer = self.get_serializer(board, data=request.data, partial=True)  
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # class BoardInvitationLinkView(ModelViewSet):
 #     queryset = Board.objects.all()
