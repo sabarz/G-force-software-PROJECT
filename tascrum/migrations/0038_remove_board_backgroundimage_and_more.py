@@ -11,10 +11,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='board',
-            name='backgroundimage',
-        ),
+        # migrations.RemoveField(
+        #     model_name='board',
+        #     name='backgroundimage',
+        # ),
         # migrations.AlterField(
         #     model_name='board',
         #     name='invitation_link',
