@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter,OrderingFilter
-from rest_framework import status
+from rest_framework import status,filters
 from .serializers import *
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import ModelViewSet
@@ -200,6 +200,17 @@ class BoardInvitationLinkView(ModelViewSet):
 
         # Return the invitation link to the frontend.
         return HttpResponse(invitation_link)
+    
+class BoardSearchViewSet(ModelViewSet):
+    serializer_class = BoardSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    # search_fields = ['title', 'description']
+    search_fields = ['title']
+
+    def get_queryset(self):
+        member = Member.objects.get(user=self.request.user)
+
+        return Board.objects.filter(members=member)
         
 ### List view
 class ListView(ModelViewSet):
