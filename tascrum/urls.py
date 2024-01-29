@@ -26,11 +26,12 @@ router.register('workspace-members',views.WorkspaceMembersView,basename='workspa
 ### board urls
 router.register('board',views.BoardViewSet,basename='board')
 router.register('board-bgimage',views.BoardImageView,basename='board-bgimage')
-router.register('boards-has-start',views.BoardStarView,basename='boards-has-start')
+router.register('boards-has-star',views.BoardStarView,basename='boards-has-star')
 router.register('board-star-update',views.BoardStarUpdate,basename='board-star-update')
 router.register('board-invitation-link',views.BoardInvitationLinkView,basename='board-invitation-link')
 router.register('starred-boards',views.BoardStarView,basename='starred-boards')
 router.register('star',views.BoardStarUpdate,basename='star')
+router.register('board-search',views.BoardSearchViewSet,basename='board-search')
 # router.register('board-invitation-link',views.BoardInvitationLinkView,basename='board-invitation-link')
 router.register('crboard',views.CreateBoardView,basename='crboard')
 router.register('recentlyviewed',views.BoardRecentlyViewedView,basename='recentlyviewed')
@@ -73,7 +74,14 @@ router.register('crlabel',views.CreateLabelView,basename='crlabel')
 router.register('crcard-labels',views.LabelCardAssignView,basename='crcard-labels')
 router.register('card-labels',views.LabelCardView,basename='card-labels')
 router.register('assign',views.CardAssignmentView,basename='assign')
-router.register('dnd',views.Internal_DndView,basename='dnd')
+
+
+
+### drag and drop
+nestedRouter.register(r'boards', views.BoardViewSet, basename='boards')
+dnd_router = nested.NestedSimpleRouter(nestedRouter, r'boards', lookup='board')
+dnd_router.register(r'dnd', views.Internal_DndView, basename='dnds')
+# router.register('dnd',views.Internal_DndView,basename='dnd')
 
 ### timeline urls
 router.register('list-tl',views.ListTimelineView,basename='list-tl')
@@ -99,7 +107,12 @@ calender_router.register(r'calender', views.CalenderView, basename='calender')
 router.register('csvbuild',views.CardCSVViewSet,basename='csvbuild')
 router.register('chatbot',views.ChatbotAPIView,basename='chatbot')
 
+###board view & Highlight
+boardview_router = nested.NestedSimpleRouter(nestedRouter, r'boards', lookup='board')
+boardview_router.register(r'boardview', views.BoardViewCardView, basename='boardview')
+boardhighlight_router = nested.NestedSimpleRouter(nestedRouter, r'boards', lookup='board')
+boardhighlight_router.register(r'boardhighlight', views.BoardHighlightCardView, basename='boardhighlight')
 
-urlpatterns = router.urls + nestedRouter.urls + calender_router.urls + meeting_router.urls + search_router.urls + filter_board_router.urls + timeline1_router.urls + timeline2_router.urls
+urlpatterns = router.urls + nestedRouter.urls + dnd_router.urls + calender_router.urls + meeting_router.urls + search_router.urls + filter_board_router.urls + timeline1_router.urls + timeline2_router.urls + boardview_router.urls + boardhighlight_router.urls
 
 

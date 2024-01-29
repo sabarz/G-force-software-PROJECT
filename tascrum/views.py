@@ -1,9 +1,9 @@
 from django.http import HttpResponse
 from rest_framework.decorators import action
 from rest_framework.response import Response
-# from django_filters.rest_framework import DjangoFilterBackend
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter,OrderingFilter
-from rest_framework import status
+from rest_framework import status,filters
 from .serializers import *
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.viewsets import ModelViewSet
@@ -149,22 +149,25 @@ class BoardMembersView(ModelViewSet):
         return Board.objects.filter(members = member_id)
     
 class BoardStarView(ModelViewSet):
-    serializer_class = BoardStarSerializer
+    serializer_class = BoardSerializer
     
     def get_queryset(self):
         member_id = Member.objects.get(user_id = self.request.user.id)
         return Board.objects.filter(members=member_id, has_star=True)
     
 class BoardStarUpdate(ModelViewSet):
-    serializer_class = CreateBoardStarSerializer
+    queryset = Board.objects.all()
+    serializer_class = BoardStarSerializer
 
-    @action(detail=True, methods=['put'])
-    def update_star(self, request, pk=None):
-        board = self.get_object()
-        serializer = self.get_serializer(board, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+    # @action(detail=True, methods=['put'])
+    # def update_star(self, request, pk=None):
+    #     board = self.get_object()
+    #     serializer = self.get_serializer(board, data=request.data, partial=True)  
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     else:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 # class BoardInvitationLinkView(ModelViewSet):
 #     queryset = Board.objects.all()
@@ -197,6 +200,17 @@ class BoardInvitationLinkView(ModelViewSet):
 
         # Return the invitation link to the frontend.
         return HttpResponse(invitation_link)
+    
+class BoardSearchViewSet(ModelViewSet):
+    serializer_class = BoardSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    # search_fields = ['title', 'description']
+    search_fields = ['title']
+
+    def get_queryset(self):
+        member = Member.objects.get(user=self.request.user)
+
+        return Board.objects.filter(members=member)
         
 ### List view
 class ListView(ModelViewSet):
@@ -412,7 +426,14 @@ class Internal_DndView(ModelViewSet):
 
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
-        return Card.objects.filter(members = member)
+        board_id = self.kwargs['board_pk']
+        list_id = List.objects.filter(board__in = board_id)
+        return Card.objects.filter(list__in = list_id)
+
+
+        # board_id = self.request.query_params.get('board')
+        # list_id = List.objects.filter(board__in = board_id)
+        # return Card.objects.filter(list__in=list_id)
 
 
 ### time line 
@@ -474,7 +495,7 @@ class CreateMeetingView(ModelViewSet):
 
     def get_queryset(self):
         member = Member.objects.get(user_id = self.request.user.id)
-        return Meeting.objects.filter(member = member,board=self.kwargs['board_pk'])
+        return Meeting.objects.filter(members = member,board=self.kwargs['board_pk'])
 
 class MeetingView(ModelViewSet):
     serializer_class = MeetingSerializer
@@ -1041,3 +1062,30 @@ class CardFilterView(ModelViewSet):
         boards = Board.objects.filter(members = member) 
         lists = List.objects.filter(board__in = boards) 
         return Card.objects.filter(list__in=lists)
+
+
+## board view cards
+class BoardViewCardView(ModelViewSet): 
+    serializer_class = BoardViewCardSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        member = Member.objects.get(user_id = self.request.user.id)
+        w = Workspace.objects.filter(id = self.kwargs['board_pk'])
+        boards = Board.objects.filter(workspace__in=w,members = member)
+        lists = List.objects.filter(board__in = boards)
+        cards = Card.objects.filter(list__in=lists) 
+        return cards
+
+## highlight board cards
+class BoardHighlightCardView(ModelViewSet): 
+    serializer_class = BoardHighlightCardSerializer 
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        member = Member.objects.get(user_id = self.request.user.id)
+        w = Workspace.objects.filter(id = self.kwargs['board_pk'])
+        boards = Board.objects.filter(workspace__in=w,members = member)
+        lists = List.objects.filter(board__in = boards)
+        cards = Card.objects.filter(list__in=lists, storypoint__gte=5) 
+        return cards

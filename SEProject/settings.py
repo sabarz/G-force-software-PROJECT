@@ -26,8 +26,8 @@ SECRET_KEY = "django-insecure-8%(411=*i)z)6c*^l1dsh$jcr)yd-!1=8sy^j8j!cwjzj+^mzo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-# ALLOWED_HOSTS = ['127.0.0.1','localhost:8000']
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost:8000','141.11.182.93']
 
 
 
@@ -96,7 +96,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'SEProject',
+#         'NAME': 'SeDb',
 #         'USER': 'postgres',
 #         'PASSWORD': 'AmirPostgreSQL',
 #         'HOST': 'localhost',
