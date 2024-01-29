@@ -660,11 +660,24 @@ class TimelineStartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = ['startdate']
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data['startdate'] is None:
+            data['startdate'] = '1/1/2023'
+        return data
+
 
 class TimelineDueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Card
         fields = ['duedate']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if data['duedate'] is None:
+            data['duedate'] = '1/1/2023'
+        return data
 
 
 ## burndown
