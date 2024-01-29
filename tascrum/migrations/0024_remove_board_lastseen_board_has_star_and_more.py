@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name="board",
-            name="backgroundImage",
+            name="backgroundimage",
             field=models.ImageField(null=True, upload_to="images/"),
         ),
     ]

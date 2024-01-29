@@ -7,3 +7,5 @@ import string
 #     return f"https://example.com/invitation/{random_string}"
 
 OPENAI_API_KEY = "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"
+
+
