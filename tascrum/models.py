@@ -122,7 +122,7 @@ class Card(models.Model):
         # unique_together = ('list', 'order',)
     
     def save(self, *args, **kwargs):
-        if self.startdate and self.duedate and self.startdate <= self.duedate:
+        if self.startdate and self.duedate and self.startdate >= self.duedate:
             raise ValidationError("Due date must be after start date.")
             
         if not self.order:
